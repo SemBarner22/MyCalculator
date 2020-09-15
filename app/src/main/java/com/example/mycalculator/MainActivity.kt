@@ -20,59 +20,51 @@ class MainActivity : AppCompatActivity() {
         text.movementMethod = ScrollingMovementMethod();
     }
 
-    var color = "grey"
-    var string : String = "0"
-    var ans : String = "0"
-
     fun eval(view: View) {
         var appending: String = (view as Button).tag as String
-        if (string == "0" && appending.matches("\\d+".toRegex())) {
-            string = appending;
-        } else {
-            string += appending
-        }
-        text.text = string
+        text.text = text.text.toString() + appending
     }
 
     @SuppressLint("SetTextI18n")
     fun res(view: View?) {
         try {
-            answer.text = ExpressionBuilder(string).build().evaluate().toBigDecimal().toString()
+            if (text.text.isEmpty()) {
+                answer.text = "0"
+            } else {
+                answer.text =
+                    ExpressionBuilder(text.text.toString()).build().evaluate().toBigDecimal()
+                        .toString()
+            }
             answer.setTextColor(Color.GRAY)
-            ans = answer.text.toString()
-        }  catch (e : Exception) {
+        } catch (e: Exception) {
             answer.setTextColor(Color.RED)
         }
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        color = savedInstanceState.getString("color").toString()
-        string = savedInstanceState.getString("string").toString()
-        ans = savedInstanceState.getString("answer").toString()
-        text.text = string
-        res(null)
+        answer.setTextColor(savedInstanceState.getInt("color"))
+        text.text = savedInstanceState.getString("string").toString()
+        answer.text = savedInstanceState.getString("answer").toString()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("string", text.text as String?)
-        outState.putString("color", color)
-        outState.putString("answer", answer.text as String?)
+        outState.putString("string", text.text.toString())
+        outState.putInt("color", answer.currentTextColor)
+        outState.putString("answer", answer.text.toString())
     }
 
     fun clear(view: View) {
-        string = "0"
-        text.text = string
+        text.text = ""
     }
 
     fun backspace(view: View) {
-        if (string.isNotEmpty()) {
-            string = string.substring(0, string.length - 1)
+        if (text.text.isNotEmpty()) {
+            text.text = text.text.dropLast(1)
         } else {
-            string = "0"
+            text.text = ""
         }
-        text.text = string
     }
 
 
