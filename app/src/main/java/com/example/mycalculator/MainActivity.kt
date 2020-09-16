@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.content.ClipboardManager
 import android.text.method.ScrollingMovementMethod
@@ -22,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         text.movementMethod = ScrollingMovementMethod();
     }
 
+    @SuppressLint("SetTextI18n")
     fun eval(view: View) {
         var appending: String = (view as Button).tag as String
         text.text = text.text.toString() + appending
