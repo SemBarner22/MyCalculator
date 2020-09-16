@@ -1,16 +1,18 @@
 package com.example.mycalculator
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.content.ClipboardManager
 import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.isDigitsOnly
 import kotlinx.android.synthetic.main.activity_main.*
 import net.objecthunter.exp4j.ExpressionBuilder
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +25,18 @@ class MainActivity : AppCompatActivity() {
     fun eval(view: View) {
         var appending: String = (view as Button).tag as String
         text.text = text.text.toString() + appending
+    }
+
+    fun copy(view: View) {
+        setClipboard(this, answer.text.toString())
+    }
+
+
+    private fun setClipboard(context: Context, text: String) {
+        val clipboard =
+            context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Copied Text", text)
+        clipboard.setPrimaryClip(clip)
     }
 
     @SuppressLint("SetTextI18n")
